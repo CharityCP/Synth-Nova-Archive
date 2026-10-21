@@ -24,8 +24,10 @@ function App() {
         Check System Status
       </button>
       <p>{error}</p>
-      <RecordCard record={records[0]} />
-      <RecordCard record={records[1]} />
+      {records.map ((record) => (
+        <RecordCard key={record.event_id} record={record}/>
+      ))
+      }
     </main>
   )
 }
