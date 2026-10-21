@@ -1,6 +1,7 @@
 import {useState} from 'react'
 import useFetchData from './useFetchData.js'
 import RecordCard from './RecordCard.jsx'
+import Details from './Details.jsx'
 
 function App() {
   const { records, loading, error } = useFetchData (
@@ -8,12 +9,17 @@ function App() {
   )
   const [query, setQuery] = useState("")
   const [eventType, setEventType] = useState("All")
+  const [selectedEventId, setSelectedEventId] = useState (null)
   const search = () => {
     setQuery(document.querySelector("#query").value) 
   } 
     const filteredRecords = records.filter((record) =>
     record.event_name.toLowerCase().includes(query.toLowerCase()) &&
     (eventType === "All" || record.event_type === eventType)
+  )
+  
+  const selectedEvent = records.find(
+    (record) => record.event_id === selectedEventId
   )
 
   const eventTypes = [
@@ -62,9 +68,15 @@ function App() {
           </select>
 
       {filteredRecords.map ((record) => (
-        <RecordCard key={record.event_id} record={record}/>
+        <RecordCard 
+        key={record.event_id} 
+        record={record}
+        onChoose={setSelectedEventId}
+          />
       ))
       }
+      <Details
+      record={selectedEvent}/>
     </main>
   )
 }
