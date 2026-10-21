@@ -1,9 +1,14 @@
-import { useState } from 'react'
-import heroImg from './assets/hero.png'
-import reactLogo from './assets/react.svg'
-import viteLogo from './assets/vite.svg'
+import useFetchData from './useFetchData.js'
+import RecordCard from './RecordCard.jsx'
 
 function App() {
+  const { records, loading, error } = useFetchData (
+    "https://student-data-api.perkinscharity78.workers.dev/api/v1/datasets/chronicles-events/records?limit=50"
+  )
+
+  if (loading) {
+    return <p>Loading....</p>
+  }
   function checkSystemStatus () {
     alert("Unity Nexus Archive: System Online")
   }
@@ -18,6 +23,9 @@ function App() {
       <button onClick={checkSystemStatus}>
         Check System Status
       </button>
+      <p>{error}</p>
+      <RecordCard record={records[0]} />
+      <RecordCard record={records[1]} />
     </main>
   )
 }
