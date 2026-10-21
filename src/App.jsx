@@ -10,14 +10,17 @@ function App() {
   const [query, setQuery] = useState("")
   const [eventType, setEventType] = useState("All")
   const [selectedEventId, setSelectedEventId] = useState (null)
+  const [visibleCount, setVisibleCount] = useState(6)
+
   const search = () => {
     setQuery(document.querySelector("#query").value) 
+    setVisibleCount (6)
   } 
     const filteredRecords = records.filter((record) =>
     record.event_name.toLowerCase().includes(query.toLowerCase()) &&
     (eventType === "All" || record.event_type === eventType)
   )
-  
+  const visibleRecords = filteredRecords.slice(0, visibleCount)
   const selectedEvent = records.find(
     (record) => record.event_id === selectedEventId
   )
@@ -61,7 +64,9 @@ function App() {
       <select
          value={eventType}
          onChange={(e) => {
-          setEventType(e.target.value)}}>
+          setEventType(e.target.value)
+          setVisibleCount (6)
+          }}>
 
           {eventTypes.map((type) => (
             <option key={type} value={type}>
@@ -73,8 +78,8 @@ function App() {
       {filteredRecords.length === 0 && (
         <p>No Archive records match your search or selected event type.</p>
       )}
-      
-      {filteredRecords.map ((record) => (
+
+      {visibleRecords.map ((record) => (
         <RecordCard 
         key={record.event_id} 
         record={record}
@@ -82,6 +87,10 @@ function App() {
           />
       ))
       }
+      {visibleCount < filteredRecords.length && (
+        <button onClick={() => setVisibleCount (visibleCount + 6)}>Load More</button>
+      )}
+      
       <Details
       record={selectedEvent}/>
     </main>
