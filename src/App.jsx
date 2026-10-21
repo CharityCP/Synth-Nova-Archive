@@ -1,3 +1,4 @@
+import {useState} from 'react'
 import useFetchData from './useFetchData.js'
 import RecordCard from './RecordCard.jsx'
 
@@ -5,6 +6,14 @@ function App() {
   const { records, loading, error } = useFetchData (
     "https://student-data-api.perkinscharity78.workers.dev/api/v1/datasets/chronicles-events/records?limit=50"
   )
+  const [query, setQuery] = useState("")
+  const search = () => {
+    setQuery(document.querySelector("#query").value) 
+  } 
+    const filteredRecords = records.filter((record) =>
+    record.event_name.toLowerCase().includes(query.toLowerCase())
+  )
+  
 
   if (loading) {
     return <p>Loading....</p>
@@ -23,8 +32,18 @@ function App() {
       <button onClick={checkSystemStatus}>
         Check System Status
       </button>
+
       <p>{error}</p>
-      {records.map ((record) => (
+
+    <input 
+    id="query"
+    type="text"
+    placeholder="Search Archive Events..."
+      />
+
+      <button onClick={search}>Search Archive</button>
+
+      {filteredRecords.map ((record) => (
         <RecordCard key={record.event_id} record={record}/>
       ))
       }
