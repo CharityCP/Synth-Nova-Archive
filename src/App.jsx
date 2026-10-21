@@ -30,6 +30,9 @@ function App() {
   if (loading) {
     return <p>Loading....</p>
   }
+  if (error) {
+    return <p>Archive connection error: </p>
+  }
   function checkSystemStatus () {
     alert("Unity Nexus Archive: System Online")
   }
@@ -67,6 +70,10 @@ function App() {
           ))}
           </select>
 
+      {filteredRecords.length === 0 && (
+        <p>No Archive records match your search or selected event type.</p>
+      )}
+      
       {filteredRecords.map ((record) => (
         <RecordCard 
         key={record.event_id} 
