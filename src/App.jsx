@@ -7,14 +7,20 @@ function App() {
     "https://student-data-api.perkinscharity78.workers.dev/api/v1/datasets/chronicles-events/records?limit=50"
   )
   const [query, setQuery] = useState("")
+  const [eventType, setEventType] = useState("All")
   const search = () => {
     setQuery(document.querySelector("#query").value) 
   } 
     const filteredRecords = records.filter((record) =>
-    record.event_name.toLowerCase().includes(query.toLowerCase())
+    record.event_name.toLowerCase().includes(query.toLowerCase()) &&
+    (eventType === "All" || record.event_type === eventType)
   )
-  
 
+  const eventTypes = [
+    "All",
+    ...new Set(records.map((record) => record.event_type))
+  ]
+  
   if (loading) {
     return <p>Loading....</p>
   }
@@ -42,6 +48,18 @@ function App() {
       />
 
       <button onClick={search}>Search Archive</button>
+
+      <select
+         value={eventType}
+         onChange={(e) => {
+          setEventType(e.target.value)}}>
+
+          {eventTypes.map((type) => (
+            <option key={type} value={type}>
+            {type}
+            </option>
+          ))}
+          </select>
 
       {filteredRecords.map ((record) => (
         <RecordCard key={record.event_id} record={record}/>
