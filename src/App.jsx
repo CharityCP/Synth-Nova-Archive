@@ -2,6 +2,7 @@ import {useState} from 'react'
 import useFetchData from './useFetchData.js'
 import RecordCard from './RecordCard.jsx'
 import Details from './Details.jsx'
+import TimelineEvents from './TimelineEvents' 
 
 function App() {
   const { records, loading, error } = useFetchData (
@@ -15,6 +16,7 @@ function App() {
   const search = () => {
     setQuery(document.querySelector("#query").value) 
     setVisibleCount (6)
+    setSelectedEventId(null)
   } 
     const filteredRecords = records.filter((record) =>
     record.event_name.toLowerCase().includes(query.toLowerCase()) &&
@@ -44,42 +46,42 @@ function App() {
    }
   return (
     <main> 
-      <h1> Synth Nova Archive</h1>
+
+       <h1> Synth Nova Archive</h1>
       <button  onClick = {activateChronolink} > Archive Entry
       </button>
       <button onClick={checkSystemStatus}>
         Check System Status
       </button>
 
-      <p>{error}</p>
+      <TimelineEvents>
+        <input
+        id="query"
+        type="text"
+        placeholder="Search Archive events..."
+        />
+        <button onClick={search}>Search Archive</button>
 
-    <input 
-    id="query"
-    type="text"
-    placeholder="Search Archive Events..."
-      />
-
-      <button onClick={search}>Search Archive</button>
-
-      <select
+        <select
          value={eventType}
          onChange={(e) => {
           setEventType(e.target.value)
           setVisibleCount (6)
+          setSelectedEventId(null)
           }}>
 
-          {eventTypes.map((type) => (
+        {eventTypes.map((type) => (
             <option key={type} value={type}>
             {type}
             </option>
           ))}
+
+        {filteredRecords.length === 0 && (
+        <p>No Archive records match your search or selected event type.</p>
+           )}
           </select>
 
-      {filteredRecords.length === 0 && (
-        <p>No Archive records match your search or selected event type.</p>
-      )}
-
-      {visibleRecords.map ((record) => (
+        {visibleRecords.map ((record) => (
         <RecordCard 
         key={record.event_id} 
         record={record}
@@ -90,9 +92,11 @@ function App() {
       {visibleCount < filteredRecords.length && (
         <button onClick={() => setVisibleCount (visibleCount + 6)}>Load More</button>
       )}
-      
-      <Details
+       <Details
       record={selectedEvent}/>
+
+         </TimelineEvents>
+    
     </main>
   )
 }
