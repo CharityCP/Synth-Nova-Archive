@@ -4,7 +4,11 @@ function Details ({record}) {
     }
 
     return (
-  <section>
+  <section className="transmission-panel">
+      <div className="transmission-header">
+        <span>◉UNITY NEXUS// ARCHIVE TRANSMISSION</span>
+        <span>SIGNAL ACTIVE</span>
+      </div>
     <h2>{record.event_name}</h2>
     <p>Character: {record.character_name}</p>
     <p>Event Type: {record.event_type}</p>
