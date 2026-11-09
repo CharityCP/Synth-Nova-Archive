@@ -316,6 +316,7 @@
  box-shadow: 0 0 12px rgba(70, 220, 229, 0.2);
  gap: 10px;
  position: relative;
+ transition: transform 0.3s ease, box-shadow 0.3s ease, border-color 0.3s ease;
  } 
 
  .record-card button {
@@ -362,6 +363,12 @@
   color: #f0fcff;
 }
 
+.record-card-active {
+  border-color: #00ffff;
+  box-shadow: 0 0 2px rgba(0, 255, 055, 0.6);
+  transform: translateY(-5px);
+}
+
 .transmission-panel {
   background-color: #061321;
   color: #f0faff;
@@ -371,9 +378,21 @@
   padding: 25px;
   margin-top: 25px;
   box-shadow: 0 0 18px rgba(70, 220, 229, 0.25);
+  animation: transmissionActive 0.7s ease-out;
+}
+@keyframes transmissionActive {
+  from {
+    opacity: 0;
+    transform: scale(0.97);
+  }
+  to {
+    opacity: 1;
+    transform: scale(1);
+  }
 }
 
 .transmission-panel h2 {
+  font-family: 'Orbitron', sans-serif;
   color: #f5cb75;
   font-weight: 800;
   text-shadow: 0 0 5px rgba(245, 203, 117, 0.3);
@@ -386,6 +405,7 @@ font-size: 16px;
 line-height: 1.6;
 margin: 10px 0;
 }
+
 
 .transmission-header {
 display: flex;
@@ -560,7 +580,7 @@ background: linear-gradient (
   font-weight: 700;
   letter-spacing: 1px;
 
-  curdor: pointer;
+  cursor: pointer;
 
   box-shadow:
      inset 0 0 8px rgba(70, 220, 229, 0.2),
@@ -644,6 +664,25 @@ background: linear-gradient (
     
   transform: translateY(-3px);
 }
+
+.classified-intel {
+  color: #00ffff;
+  border: 1px solid #00ffff;
+  padding: 12px;
+  background: rgba(0, 255, 255, 0.08);
+  animation: intelReveal 0.6s ease-out;
+}
+@keyframes intelReveal {
+  from{
+    opacity: 0;
+    transform: translateY(10px);
+  }
+  to {
+    opacity: 0;
+    transform: translateY(0);
+  }
+}
+
 @media (max-width: 768) {
   .archive-dashboard {
     flex-direction: column;

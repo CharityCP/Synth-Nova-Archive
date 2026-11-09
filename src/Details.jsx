@@ -4,7 +4,7 @@ function Details ({record}) {
     }
 
     return (
-  <section className="transmission-panel">
+  <section key={record.event_id} className="transmission-panel">
       <div className="transmission-header">
         <span>◉UNITY NEXUS// ARCHIVE TRANSMISSION</span>
         <span>SIGNAL ACTIVE</span>

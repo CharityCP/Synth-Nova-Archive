@@ -1,6 +1,7 @@
+import { supabase } from "./supabaseClient"
 import './App.css'
 import ArchiveHero from './ArchiveHero.jsx'
-import {useState} from 'react'
+import { useState , useEffect } from 'react'
 import useFetchData from './useFetchData.js'
 import RecordCard from './RecordCard.jsx'
 import Details from './Details.jsx'
@@ -16,6 +17,19 @@ const archiveCategories =[
 ];
 
 function App() {
+  const { data: imageData } = supabase.storage
+        .from("archive-images")
+        .getPublicUrl("IMG_3672.png")
+        
+  const { data: missionImageData } = supabase.storage
+         .from("archive-images")
+         .getPublicUrl("IMG_3673.png")
+         
+
+  const {  data: characterImageData } = supabase.storage
+        .from("archive-images")
+        .getPublicUrl("unityNexus.jpeg")
+
   const { records, loading, error } = useFetchData (
     "https://student-data-api.perkinscharity78.workers.dev/api/v1/datasets/chronicles-events/records?limit=50"
   )
@@ -24,11 +38,6 @@ function App() {
   const [selectedEventId, setSelectedEventId] = useState (null)
   const [visibleCount, setVisibleCount] = useState(6)
 
-  const search = () => {
-    setQuery(document.querySelector("#query").value) 
-    setVisibleCount (6)
-    setSelectedEventId(null)
-  } 
     const filteredRecords = records.filter((record) =>
     record.event_name.toLowerCase().includes(query.toLowerCase()) &&
     (eventType === "All" || record.event_type === eventType)
@@ -73,7 +82,22 @@ function App() {
         <h2> Archive Directory</h2>
         <div className="archive-category-grid">
           {archiveCategories.map((category) => (
-            <div className="archive-category-card" key={category.id}>
+            <div className="archive-category-card" 
+            key={category.id}
+            style={{
+             backgroundImage:
+             category.id === 1
+              ? `url("${characterImageData.publicUrl}")`
+              :category.id === 2
+               ? `url("${imageData.publicUrl}")`
+                : category.id === 5
+                  ? `url("${missionImageData.publicUrl}")`
+                    : "none",
+                    backgroundSize: category.id === 1 ? "50%" : "cover",
+                    backgroundRepeat: "no-repeat",
+                    backgroundPosition: "center,"
+              }}>
+
               <h3>{category.title}</h3>        
         </div>
           ))}
@@ -104,11 +128,25 @@ function App() {
         <div className="archive-search-controls">
         <input
         id="query"
+        value= {query}
+        onChange={(event) => {
+          setQuery(event.target.value)
+          setVisibleCount(6)
+          setSelectedEventId(null)
+        } }
         type="text"
         placeholder="Search Archive events..."
         />
-        <button onClick={search}>Search Archive</button>
 
+        <button onClick={() => {
+                  setQuery("")
+                  setEventType("All")
+                  setVisibleCount(6)
+                  setSelectedEventId(null)
+        }}>
+          Clear Search
+        </button>
+        
         <select
          value={eventType}
          onChange={(e) => {
@@ -123,10 +161,15 @@ function App() {
             </option>
           ))}
           
-        {filteredRecords.length === 0 && (
+          </select>
+
+           <p className="archive-results-count">
+            {filteredRecords.length} Archive Records Found
+          </p>
+
+           {filteredRecords.length === 0 && (
         <p>No Archive records match your search or selected event type.</p>
            )}
-          </select>
           </div>
 
        <div className="timeline-record-grid">

@@ -272,6 +272,52 @@ The Unity Nexus Archive is an early step toward creating an immersive digital un
 
 ---
 
+## Supabase Storage Integration
+
+### Overview
+Integrated Supabase Storage into the Synth Nova Archive to display original artwork within the Archive Directory.
+
+### Technologies Used
+- React + Vite
+- Supabase Storage
+- JavaScript (JSX)
+- CSS
+
+### Implementation
+- Created a dedicated Supabase project for the Archive.
+- Created a public Storage bucket named `archive-images`.
+- Configured the Supabase client using environment variables.
+- Added a read-only Storage policy.
+- Used `getPublicUrl()` to generate public image URLs.
+- Used conditional rendering to assign images to specific Archive cards.
+- Preserved the existing card styling and responsive grid.
+
+### Archive Image Assignments
+
+| Archive Category | Image File |
+|---|---|
+| Character Profiles | `unityNexus.jpeg` |
+| Faction Records | `IMG_3672.png` |
+| Mission Logs | `IMG_3673.png` |
+
+### Testing
+- Confirmed the Supabase Storage connection.
+- Verified public image URLs in the browser.
+- Resolved an incorrect Storage bucket name.
+- Confirmed all three images display in their assigned Archive cards.
+
+### Security
+- Stored Supabase configuration in `.env`.
+- Confirmed `.env` is excluded from Git using `.gitignore`.
+- Used a browser-safe Supabase publishable key.
+- Limited Storage access to public image retrieval.
+
+### Future Improvements
+- Add original artwork to the remaining Archive categories.
+- Improve image positioning and scaling for different screen sizes.
+- Continue developing interactive Archive functionality.
+
+
 **Created by CharityCP**
 
 **Project:** Synth Nova Chronicles — Unity Nexus Archive
