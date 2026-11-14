@@ -6,6 +6,7 @@ import useFetchData from './useFetchData.js'
 import RecordCard from './RecordCard.jsx'
 import Details from './Details.jsx'
 import TimelineEvents from './TimelineEvents' 
+import FactionLabel from './FactionLabel'
 
 const archiveCategories =[
   {id: 1, title:"Character Profiles"},
@@ -37,7 +38,8 @@ function App() {
   const [eventType, setEventType] = useState("All")
   const [selectedEventId, setSelectedEventId] = useState (null)
   const [visibleCount, setVisibleCount] = useState(6)
-
+  const [statusDisplay, setStatusDisplay] = useState (": Awaiting System Check")
+ 
     const filteredRecords = records.filter((record) =>
     record.event_name.toLowerCase().includes(query.toLowerCase()) &&
     (eventType === "All" || record.event_type === eventType)
@@ -59,27 +61,35 @@ function App() {
     return <p>Archive connection error: </p>
   }
   function checkSystemStatus () {
-    alert("Unity Nexus Archive: System Online")
+    setStatusDisplay("Status Healthy")
   }
-   function activateChronolink () {
+  function resetSystemStatus() {
+    setStatusDisplay("Awaiting System Check")
+  }
+  function activateChronolink () {
     alert("Chronolink Activated")
-   }
+  }
   return (
     <main> 
       <ArchiveHero>
-    <h1> Synth Nova Archive</h1>
-    <div className="hero-buttons">
-      <button  onClick = {activateChronolink} > Archive Entry
-      </button>
-      <button onClick={checkSystemStatus}>
-        Check System Status
-      </button>
-      </div>
+        <FactionLabel faction="Unity Nexus"/>
+        <h1> Synth Nova Archive</h1>
+          <div className="hero-buttons">
+            <button  onClick = {activateChronolink} > Archive Entry
+            </button>
+            <button onClick={checkSystemStatus}>
+              Check System Status
+            </button>
+            <button onClick={resetSystemStatus}>
+              Reset Status
+            </button>
+          </div>
+          <div className="status-display">STATUS {statusDisplay}</div>
       </ArchiveHero>
        
-       <div className="archive-dashboard">
+      <div className="archive-dashboard">
         <div className="archive-directory">
-        <h2> Archive Directory</h2>
+          <h2> Archive Directory</h2>
         <div className="archive-category-grid">
           {archiveCategories.map((category) => (
             <div className="archive-category-card" 
